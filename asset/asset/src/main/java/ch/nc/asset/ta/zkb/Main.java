@@ -12,6 +12,8 @@ import org.apache.tika.parser.ParseContext;
 import org.apache.tika.parser.pdf.PDFParser;
 import org.apache.tika.sax.BodyContentHandler;
 
+import ch.nc.asset.imp.ta.Transaction;
+
 
 public class Main {
 
@@ -59,8 +61,13 @@ public class Main {
 
 		Iterator<String> iterator = lines.iterator();
 		int counter = 1;
+		Transaction transaction=new Transaction();
+		IR_IsinAndDetails ir_IsinAndDetails=new IR_IsinAndDetails();
+		ir_IsinAndDetails.setIterator(iterator);
+		ir_IsinAndDetails.setTransaction(transaction);
+		
 		//Receipt receipt;
-		String transaction = null;
+		String reference = null;
 		String details = null;
 		String kommissionSQ = null;
 		String date=null;
@@ -71,7 +78,7 @@ public class Main {
 				String line = (String) iterator.next();
 				System.out.println(counter++ +": "+line);
 				if (line.contains("Abwicklungs-Nr.")) {
-					transaction=line;					
+					reference=line;					
 				}
 				if (line.contains("Eidg. Abgaben")) {
 					kommissionSQ=line;					
@@ -80,6 +87,7 @@ public class Main {
 					line = (String) iterator.next();
 					details=line;					
 				}
+				ir_IsinAndDetails.analyse(line);
 				if (line.contains("ISIN")) {
 					title=line;
 					line = (String) iterator.next();
@@ -99,12 +107,14 @@ public class Main {
 				e.printStackTrace();
 			}
 		}
-		System.out.println("transaction: "+transaction);
+		System.out.println("transaction: "+reference);
 		System.out.println("details: "+details);
 		System.out.println("kommissionSQ: "+kommissionSQ);
 		System.out.println("date: "+date);
 		System.out.println("title: "+title);
 		System.out.println("totalAmount: "+totalAmount);
+		System.out.println("------------------------------------------------");
+		System.out.println(transaction.toString());
 		/*
 		 * itemHandler.write(); bookingWriter.closeOutput();
 		 * 

@@ -7,9 +7,6 @@ import ch.nc.asset.Helper;
 
 public class IR_IsinAndDetails extends InputRuleBase {
 
-	private String isin;
-	private String details;
-	
 	public String getMessage() {
 		return this.getClass().getSimpleName();
 	}
@@ -20,7 +17,6 @@ public class IR_IsinAndDetails extends InputRuleBase {
 			transaction.isin=Helper.TextFollowing(line, "ISIN");
 			
 			line = (String) iterator.next();
-			details = line;
 			ArrayList<String> tokenList=Helper.getTokens(line);
 			transaction.titleCurrency=Currency.getCurrency(tokenList.get(1));
 			transaction.tradeCurrency=Currency.getCurrency(tokenList.get(2));
