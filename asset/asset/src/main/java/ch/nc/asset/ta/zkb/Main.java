@@ -3,8 +3,7 @@ package ch.nc.asset.ta.zkb;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.stream.Stream;
+import java.util.ArrayList;
 
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
@@ -33,7 +32,7 @@ public class Main {
 
 		String content = handler.toString();
 		System.out.println("Size of content: " + content.length());
-		Stream<String> lines = content.lines();
+	//	Stream<String> lines = content.lines();
 		/*
 		 * Die Reihenfolge wie sie aus dem PDF extrahiert wird, hat keinen Zusammenhang zu
 		 * der auf dem Papier. In einem ersten Durchlauf werden zuerst die relevanten Zeilen
@@ -41,85 +40,61 @@ public class Main {
 		 * und die relevanten Daten entnommen
 		 * 
 		 */
-		//System.out.println("Nr. of lines: " + lines.count());
 
-		// Initiate processing System
-		/*
-		 * ItemHandler itemHandler = new ItemHandler();
-		 * itemHandler.setInputFileName("P:\\finanzen\\2025\\Migros\\ItemsList-3.csv");
-		 * itemHandler.setOutputFileName("P:\\finanzen\\2025\\Migros\\ItemsList-3.csv");
-		 * itemHandler.read(); Item.updateUsage = true;
-		 * 
-		 * Accounting accounting = new Accounting();
-		 * accounting.setItemHandler(itemHandler);
-		 * 
-		 * BookingWriter bookingWriter = new BookingWriter();
-		 * bookingWriter.openOutput("P:\\finanzen\\FIBU_CSV_IMPORT.csv");
-		 * 
-		 * accounting.setBookingWriter(bookingWriter);
-		 */
-
-		Iterator<String> iterator = lines.iterator();
-		int counter = 1;
+		//Iterator<String> iterator = lines.iterator();
+		Lines lines=new Lines();
+		lines.setIterator(content.lines().iterator());
 		Transaction transaction=new Transaction();
-		IR_IsinAndDetails ir_IsinAndDetails=new IR_IsinAndDetails();
-		ir_IsinAndDetails.setIterator(iterator);
-		ir_IsinAndDetails.setTransaction(transaction);
+		transaction.bank="ZKB";
 		
-		//Receipt receipt;
-		String reference = null;
-		String details = null;
-		String kommissionSQ = null;
-		String date=null;
-		String title=null;
-		String totalAmount=null;
-		while (iterator.hasNext()) {
+		ArrayList <InputRuleBase> inputRules = new ArrayList <InputRuleBase>();
+		
+		inputRules.add(new IR_IsinAndDetails());
+		inputRules.add(new IR_Konto());
+		inputRules.add(new IR_Reference());
+		inputRules.add(new IR_Sec());
+		inputRules.add(new IR_TaxCh());
+		inputRules.add(new IR_TradeTotal());
+		inputRules.add(new IR_AccountValue());
+		inputRules.add(new IR_Type());
+		inputRules.add(new IR_Date());
+		
+		for(InputRuleBase rule: inputRules) {
+			rule.setGetline(lines);
+			rule.setTransaction(transaction);
+		}
+		
+		
+		while (lines.hasNext()) {
 			try {
-				String line = (String) iterator.next();
-				System.out.println(counter++ +": "+line);
-				if (line.contains("Abwicklungs-Nr.")) {
-					reference=line;					
-				}
-				if (line.contains("Eidg. Abgaben")) {
-					kommissionSQ=line;					
-				}
-				if (line.contains("Anzahl")) {
-					line = (String) iterator.next();
-					details=line;					
-				}
-				ir_IsinAndDetails.analyse(line);
-				if (line.contains("ISIN")) {
-					title=line;
-					line = (String) iterator.next();
-					details=line;
-					line = (String) iterator.next();
-					details = details +" "+line;
-				}
-				if (line.contains("Buchungstag:")) {
-					date=line;					
-				}
-				if (line.contains("Total")) {
-					totalAmount=line;					
-				}
+				String line = lines.next();
+				boolean done;
+				int i=0;
+				InputRuleBase rule;
+				while (i<inputRules.size()) {
+					rule=inputRules.get(i);
+					System.out.println("--Rule: " + rule.getClass().getSimpleName());
+					done=rule.analyse(line);
+					if(done) {
+						// remove the rule which has completed.
+						// do not increment the index!
+						inputRules.remove(i);
+					} else {
+						i++;
+					}
+					
+				}			
+				
 			} catch (Exception e) {
-				System.out.println("Problem in receipt nr. " + counter);
+				System.out.println("Problem in line nr. " + lines.getCounter());
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		System.out.println("transaction: "+reference);
-		System.out.println("details: "+details);
-		System.out.println("kommissionSQ: "+kommissionSQ);
-		System.out.println("date: "+date);
-		System.out.println("title: "+title);
-		System.out.println("totalAmount: "+totalAmount);
-		System.out.println("------------------------------------------------");
+		
+		System.out.println("-----Transaction-------------------------------------------");
 		System.out.println(transaction.toString());
-		/*
-		 * itemHandler.write(); bookingWriter.closeOutput();
-		 * 
-		 * System.out.println("Anzahl Kassabons: " + counter);
-		 */
+		
 	}
 
 }

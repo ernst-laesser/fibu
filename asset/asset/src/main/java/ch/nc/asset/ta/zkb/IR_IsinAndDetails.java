@@ -16,18 +16,21 @@ public class IR_IsinAndDetails extends InputRuleBase {
 		if (line.contains("ISIN")) {
 			transaction.isin=Helper.TextFollowing(line, "ISIN");
 			
-			line = (String) iterator.next();
+			line = getLine(); // header line
+			line = line + " "+ getLine(); // append value line
 			ArrayList<String> tokenList=Helper.getTokens(line);
 			transaction.titleCurrency=Currency.getCurrency(tokenList.get(1));
 			transaction.tradeCurrency=Currency.getCurrency(tokenList.get(2));
 			transaction.quantity=Integer.parseInt(tokenList.get(3));
-			transaction.price=Double.parseDouble(tokenList.get(5));
-			transaction.value=Double.parseDouble(tokenList.get(6));
+			transaction.price=Helper.getDouble(tokenList.get(5));
+			transaction.value=Helper.getDouble(tokenList.get(6));
 			
 			//line = (String) iterator.next();
 			found = true;
 		}
 		return found;
 	}
+	
+	
 
 }

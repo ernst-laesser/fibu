@@ -1,18 +1,16 @@
 package ch.nc.asset.ta.zkb;
 
-import java.util.Iterator;
-
 import ch.nc.asset.Context;
 import ch.nc.asset.imp.ta.Transaction;
 
 public abstract class InputRuleBase {
-
-	Iterator<String> iterator;
+	
+	Lines lines;
 	Transaction transaction;
 	Context context;
 
-	public void setIterator(Iterator<String> iterator) {
-		this.iterator = iterator;
+	public void setGetline(Lines lines) {
+		this.lines = lines;
 	}
 
 	public void setTransaction(Transaction transaction) {
@@ -22,7 +20,13 @@ public abstract class InputRuleBase {
 	public void setContext(Context context) {
 		this.context = context;
 	}
+	
+	public String getLine(){
+		return this.lines.next();
+	}
+
 
 	abstract public String getMessage();
+	abstract public boolean analyse(String line);
 
 }

@@ -1,6 +1,9 @@
 package ch.nc.asset;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Helper {
 	
@@ -20,6 +23,24 @@ public class Helper {
 			
 		}
 		return sb.toString();
+	}
+	
+	public static double DoubleFollowing(String source, String text) {
+		int pos = source.indexOf(text);
+		pos = pos + text.length();
+		StringBuffer sb = new StringBuffer();
+		char c=source.charAt(pos);
+		int l=source.length();
+		while(c == ' ' && pos<l) {
+			c=source.charAt(pos++);
+		}
+		sb.append(c);
+		while(c != ' ' && pos<l) {
+			c=source.charAt(pos++);
+			sb.append(c);
+			
+		}
+		return getDouble(sb.toString());
 	}
 	
 	public static ArrayList<String> getTokens(String source) {
@@ -55,6 +76,34 @@ public class Helper {
 		tokenList.add(sb.toString());
 		return tokenList;
 	}
+	public static double getDouble(String string) {
+		char c;
+		StringBuffer sb = new StringBuffer();
+		for(int i=0; i<string.length();i++) {
+			c=string.charAt(i);
+			if(c!='\'') {
+				sb.append(c); // remove the thousend separator "'"
+			}
+		}
+		Double d= Double.parseDouble(sb.toString());
+		return d;
+	}
+	
+	public static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+	
+	public static Date getDateFollowing(String source, String text) {
+		String dateString=TextFollowing(source, text);
+		Date date;
+		try {
+			date = simpleDateFormat.parse(dateString);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			date=null;
+		}
+		return date;
+	}
+
 	
 	
 }

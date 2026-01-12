@@ -4,9 +4,9 @@ import java.lang.reflect.Field;
 import java.util.Date;
 
 import ch.nc.asset.Currency;
+import ch.nc.asset.Helper;
 
 public class Transaction {
-	private static final Class<?> String = null;
 	public String bank;
 	public String reference;
 	public String type;
@@ -37,11 +37,27 @@ public class Transaction {
 			value=null;
 			try {
 				type=field.getType().getName();
-				if(type=="java.lang.String") {
+				if(type.equals("java.lang.String")) {
 					value=(String)field.get(this);
-				}else if(type=="int") {
+				}else if(type.equals("int")) {
 					value=Integer.toString(field.getInt(this));
-				}else {
+				}else if(type=="double") {
+					value=Double.toString(field.getDouble(this));
+				}else if(type.equals("ch.nc.asset.Currency")) {
+					Currency currency= (Currency)field.get(this);
+					if(currency!=null) {
+						value=currency.toString();
+					} else {
+						value="null";
+					}
+				}else if(type.equals("java.util.Date")) {
+					Date date= (Date)field.get(this);
+					if(date!=null) {
+						value=Helper.simpleDateFormat.format(date);
+					} else {
+						value="null";
+					}
+				} else {
 					value=type;
 				}
 				
