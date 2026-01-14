@@ -1,6 +1,7 @@
 package ch.nc.asset.ta.zkb;
 
 import ch.nc.asset.Helper;
+import ch.nc.asset.imp.ta.InputRuleBase;
 
 public class IR_TaxCh extends InputRuleBase {
 

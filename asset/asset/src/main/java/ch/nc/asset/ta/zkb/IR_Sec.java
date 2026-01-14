@@ -1,6 +1,7 @@
 package ch.nc.asset.ta.zkb;
 
 import ch.nc.asset.Helper;
+import ch.nc.asset.imp.ta.InputRuleBase;
 
 public class IR_Sec extends InputRuleBase {
 
@@ -11,7 +12,7 @@ public class IR_Sec extends InputRuleBase {
 	public boolean analyse(String line) {
 		boolean found = false;
 		if (line.contains("SEC Fee (USA)")) {
-			transaction.expenseExchange=Helper.DoubleFollowing(line, "SEC Fee (USA)");			
+			transaction.expenseExchange+=Helper.DoubleFollowing(line, "SEC Fee (USA)");			
 			found = true;
 		}
 		return found;

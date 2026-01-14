@@ -1,13 +1,13 @@
-package ch.nc.asset.ta.zkb;
+package ch.nc.asset.imp.ta;
 
 import ch.nc.asset.Context;
-import ch.nc.asset.imp.ta.Transaction;
+import ch.nc.asset.imp.Lines;
 
 public abstract class InputRuleBase {
 	
-	Lines lines;
-	Transaction transaction;
-	Context context;
+	protected Lines lines;
+	protected Transaction transaction;
+	protected Context context;
 
 	public void setGetline(Lines lines) {
 		this.lines = lines;

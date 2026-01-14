@@ -1,4 +1,4 @@
-package ch.nc.asset.ta.zkb;
+package ch.nc.asset.imp.ta.sq;
 
 import ch.nc.asset.Helper;
 import ch.nc.asset.imp.ta.InputRuleBase;
@@ -11,8 +11,8 @@ public class IR_Konto extends InputRuleBase {
 
 	public boolean analyse(String line) {
 		boolean found = false;
-		if (line.contains("Konto-Nr.")) {
-			transaction.accountIban=Helper.TextFollowing(line, "Konto-Nr.");			
+		if (line.contains("IBAN:")) {
+			transaction.accountIban=Helper.TextFollowing(line, "IBAN:");			
 			found = true;
 		}
 		return found;

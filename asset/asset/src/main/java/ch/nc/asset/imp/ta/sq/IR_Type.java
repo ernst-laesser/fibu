@@ -1,4 +1,4 @@
-package ch.nc.asset.ta.zkb;
+package ch.nc.asset.imp.ta.sq;
 
 import ch.nc.asset.imp.ta.InputRuleBase;
 
@@ -11,10 +11,10 @@ public class IR_Type extends InputRuleBase {
 	public boolean analyse(String line) {
 		boolean found = false;
 
-		if (line.startsWith("Ihr Verkauf")) {
+		if (line.contains("Transaktion:")&&line.contains("Verkauf")) {
 			transaction.type = "VERKAUF";
 			found = true;
-		} else if (line.startsWith("Ihr Kauf")) {
+		} else if (line.contains("Transaktion:")&&line.contains("Kauf")) {
 			transaction.type = "KAUF";
 			found = true;
 		}

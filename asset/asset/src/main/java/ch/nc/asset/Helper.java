@@ -103,6 +103,17 @@ public class Helper {
 		}
 		return date;
 	}
+	
+	public static ArrayList<String> tokensAfterText (String source, String text){
+		int i = source.indexOf(text);
+		if (i>=0) {
+			String s =source.substring(i+text.length());
+			ArrayList<String> tokenList=Helper.getTokens(s);
+			return tokenList;
+		} else {
+			return null;
+		}
+	}
 
 	
 	

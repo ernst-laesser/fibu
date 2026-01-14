@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import ch.nc.asset.Currency;
 import ch.nc.asset.Helper;
+import ch.nc.asset.imp.ta.InputRuleBase;
 
 public class IR_IsinAndDetails extends InputRuleBase {
 

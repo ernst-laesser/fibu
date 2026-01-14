@@ -1,9 +1,10 @@
-package ch.nc.asset.ta.zkb;
+package ch.nc.asset.imp.ta.sq;
 
 import ch.nc.asset.Helper;
 import ch.nc.asset.imp.ta.InputRuleBase;
 
-public class IR_Konto extends InputRuleBase {
+
+public class IR_Date extends InputRuleBase {
 
 	public String getMessage() {
 		return this.getClass().getSimpleName();
@@ -11,13 +12,10 @@ public class IR_Konto extends InputRuleBase {
 
 	public boolean analyse(String line) {
 		boolean found = false;
-		if (line.contains("Konto-Nr.")) {
-			transaction.accountIban=Helper.TextFollowing(line, "Konto-Nr.");			
+		if (line.contains("Gland, ")) {
+			transaction.date=Helper.getDateFollowing(line, "Gland,");			
 			found = true;
 		}
 		return found;
 	}
-	
-	
-
 }
