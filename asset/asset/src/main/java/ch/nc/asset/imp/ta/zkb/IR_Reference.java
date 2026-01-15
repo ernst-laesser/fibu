@@ -1,10 +1,9 @@
-package ch.nc.asset.ta.zkb;
+package ch.nc.asset.imp.ta.zkb;
 
 import ch.nc.asset.Helper;
 import ch.nc.asset.imp.ta.InputRuleBase;
 
-
-public class IR_TradeTotal extends InputRuleBase {
+public class IR_Reference extends InputRuleBase {
 
 	public String getMessage() {
 		return this.getClass().getSimpleName();
@@ -12,10 +11,13 @@ public class IR_TradeTotal extends InputRuleBase {
 
 	public boolean analyse(String line) {
 		boolean found = false;
-		if (line.length()<20 && line.startsWith("Total")) {
-			transaction.tradeTotal=Helper.DoubleFollowing(line, "Total");			
+		if (line.contains("Abwicklungs-Nr.")) {
+			transaction.reference=Helper.TextFollowing(line, "Abwicklungs-Nr.");			
 			found = true;
 		}
 		return found;
 	}
+	
+	
+
 }

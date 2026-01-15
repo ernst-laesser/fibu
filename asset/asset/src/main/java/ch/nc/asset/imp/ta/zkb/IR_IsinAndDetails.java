@@ -1,4 +1,4 @@
-package ch.nc.asset.ta.zkb;
+package ch.nc.asset.imp.ta.zkb;
 
 import java.util.ArrayList;
 

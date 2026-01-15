@@ -16,14 +16,14 @@ import ch.nc.asset.imp.Lines;
 import ch.nc.asset.imp.ta.InputRuleBase;
 import ch.nc.asset.imp.ta.Transaction;
 
-public class DocumentHandler {
+public class DocumentHandlerSQ {
 
 	BodyContentHandler handler;
 	Metadata metadata;
 	ParseContext pcontext;
 	PDFParser pdfparser;
 
-	public DocumentHandler() {
+	public DocumentHandlerSQ() {
 		
 	}
 
@@ -65,9 +65,9 @@ public class DocumentHandler {
 		inputRules.add(new IR_Details());
 		inputRules.add(new IR_Konto());
 		inputRules.add(new IR_Reference());
-//		inputRules.add(new IR_Sec());
-//		inputRules.add(new IR_TaxCh());
-//		inputRules.add(new IR_TradeTotal());
+		inputRules.add(new IR_ExpSq());
+		inputRules.add(new IR_ExpExchange());
+		inputRules.add(new IR_TaxCh());		
 		inputRules.add(new IR_AccountValue());
 		inputRules.add(new IR_Type());
 		inputRules.add(new IR_Date());

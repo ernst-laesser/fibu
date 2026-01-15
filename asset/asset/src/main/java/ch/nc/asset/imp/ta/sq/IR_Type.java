@@ -11,10 +11,10 @@ public class IR_Type extends InputRuleBase {
 	public boolean analyse(String line) {
 		boolean found = false;
 
-		if (line.contains("Transaktion:")&&line.contains("Verkauf")) {
+		if ((line.contains("Transaktion:")||line.contains("Börsentransaktion:")) && line.contains("Verkauf")) {
 			transaction.type = "VERKAUF";
 			found = true;
-		} else if (line.contains("Transaktion:")&&line.contains("Kauf")) {
+		} else if ((line.contains("Transaktion:")||line.contains("Börsentransaktion:")) && line.contains("Kauf")) {
 			transaction.type = "KAUF";
 			found = true;
 		}

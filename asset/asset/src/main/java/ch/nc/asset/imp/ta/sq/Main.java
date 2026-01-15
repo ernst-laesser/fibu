@@ -11,7 +11,7 @@ public class Main {
 
 	public static void main(final String[] args) throws IOException, TikaException, Exception {
 
-		DocumentHandler documentHandler = new DocumentHandler();
+		DocumentHandlerSQ documentHandler = new DocumentHandlerSQ();
 		String folder = "C:\\Users\\ernst\\SecureSafe\\Privater Safe\\Finanzen\\Fibu_2025\\SwissQuote\\Transactions\\";
 		;
 		String fileName = "Borsenabrechnung_294034_880522464_20250703.pdf";

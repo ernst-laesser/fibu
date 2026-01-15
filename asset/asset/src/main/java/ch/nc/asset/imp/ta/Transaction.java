@@ -19,8 +19,7 @@ public class Transaction {
 	public double price;
 	public double value;
 	public double taxCh;
-	public double expenseExchange;
-	public double expenseBank;
+	public double expenses;
 	public Currency tradeCurrency;
 	public double tradeTotal;
 	public String accountIban;

@@ -1,8 +1,9 @@
-package ch.nc.asset.ta.zkb;
+package ch.nc.asset.imp.ta;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 
 import org.apache.tika.exception.TikaException;
@@ -13,29 +14,37 @@ import org.apache.tika.sax.BodyContentHandler;
 import org.xml.sax.SAXException;
 
 import ch.nc.asset.imp.Lines;
-import ch.nc.asset.imp.ta.InputRuleBase;
-import ch.nc.asset.imp.ta.Transaction;
 
 public class DocumentHandler {
-
-	BodyContentHandler handler;
-	Metadata metadata;
-	ParseContext pcontext;
-	PDFParser pdfparser;
+	
+	private String bank;
+	private int year;
+	ArrayList<InputRuleBase> inputRules;	
 
 	public DocumentHandler() {
 		
 	}
 
-	public Transaction processDocument(String folder, String fileName, int year) throws IOException, SAXException, TikaException {
+	public void setBank(String bank) {
+		this.bank = bank;
+	}
 
-		String filePath = folder + "\\" + fileName;
-		FileInputStream inputstream = new FileInputStream(new File(filePath));
-		pdfparser = new PDFParser();
-		metadata = new Metadata();
-		pcontext=new ParseContext();
-		pdfparser = new PDFParser();
-		handler = new BodyContentHandler();
+	public void setYear(int year) {
+		this.year = year;
+	}
+
+	public void setInputRules(ArrayList<InputRuleBase> inputRules) {
+		this.inputRules = inputRules;
+	}
+
+	public Transaction processDocument(Path path, String fileName) throws IOException, SAXException, TikaException {
+
+//		String filePath = folder + "\\" + fileName;
+		FileInputStream inputstream = new FileInputStream(path.toFile());
+		Metadata metadata = new Metadata();
+		ParseContext pcontext=new ParseContext();
+		PDFParser pdfparser = new PDFParser();
+		BodyContentHandler handler = new BodyContentHandler();
 		pdfparser.parse(inputstream, handler, metadata, pcontext);
 
 		String content = handler.toString();
@@ -55,22 +64,9 @@ public class DocumentHandler {
 		lines.setIterator(content.lines().iterator());
 		
 		Transaction transaction = new Transaction();
-		transaction.bank = "ZKB";
+		transaction.bank = bank;
 		transaction.year = year;
-		transaction.fileName = fileName;
-
-		ArrayList<InputRuleBase> inputRules = new ArrayList<InputRuleBase>();
-
-		inputRules.add(new IR_IsinAndDetails());
-		inputRules.add(new IR_Konto());
-		inputRules.add(new IR_Reference());
-		inputRules.add(new IR_Sec());
-		inputRules.add(new IR_TaxCh());
-		inputRules.add(new IR_TradeTotal());
-		inputRules.add(new IR_AccountValue());
-		inputRules.add(new IR_Type());
-		inputRules.add(new IR_Date());
-		
+		transaction.fileName = fileName;	
 
 		for (InputRuleBase rule : inputRules) {
 			rule.setGetline(lines);
@@ -85,7 +81,7 @@ public class DocumentHandler {
 				InputRuleBase rule;
 				while (i < inputRules.size()) {
 					rule = inputRules.get(i);
-					//System.out.println("--Rule: " + rule.getClass().getSimpleName());
+//					System.out.println("--Rule: " + rule.getClass().getSimpleName());
 					done = rule.analyse(line);
 					if (done) {
 						// remove the rule which has completed.

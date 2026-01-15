@@ -1,4 +1,4 @@
-package ch.nc.asset.ta.zkb;
+package ch.nc.asset.imp.ta.zkb;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,6 +16,7 @@ import org.apache.tika.parser.pdf.PDFParser;
 import org.apache.tika.sax.BodyContentHandler;
 import org.xml.sax.SAXException;
 
+import ch.nc.asset.imp.ta.DocumentHandler;
 import ch.nc.asset.imp.ta.Transaction;
 import ch.nc.asset.imp.ta.TransactionWriter;
 
@@ -41,7 +42,7 @@ public class Main {
                     String fileName =p.getFileName().toString();
                     System.out.println("  [Datei]  " + p.getFileName());
                     try {
-						transaction = documentHandler.processDocument(folder, fileName,2025);
+						transaction = documentHandler.processDocument(p, fileName);
 					} catch (IOException | SAXException | TikaException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
